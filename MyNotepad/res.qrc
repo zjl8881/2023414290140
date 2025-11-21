@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Img/20.ico</file>
+        <file>Img/103.bmp</file>
+        <file>Img/120.bmp</file>
+        <file>Img/430.bmp</file>
+        <file>Img/BLD.BMP</file>
+        <file>Img/cut.bmp</file>
+        <file>Img/DBLUNDR.BMP</file>
+        <file>Img/exit.bmp</file>
+        <file>Img/ITL.BMP</file>
+        <file>Img/new2.bmp</file>
+        <file>Img/open3.bmp</file>
+        <file>Img/paste.bmp</file>
+        <file>Img/UNDRLN.BMP</file>
+        <file>Img/WORDUNDR.BMP</file>
+    </qresource>
+</RCC>
