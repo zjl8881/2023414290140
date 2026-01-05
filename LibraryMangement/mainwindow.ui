@@ -1,31 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>mainwindow</class>
+ <widget class="QMainWindow" name="mainwindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>图书管理系统</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="btnAddBook">
+      <property name="text">
+       <string>添加新图书</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tableBooks">
+      <column>
+       <property name="text">
+        <string>图书编号</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>图书名称</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>作者</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>库存数量</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <!-- 正确写法：空标签用 "/>" 闭合 -->
  <resources/>
  <connections/>
 </ui>
