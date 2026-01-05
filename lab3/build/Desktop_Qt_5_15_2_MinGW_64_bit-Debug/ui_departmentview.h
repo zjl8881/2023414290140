@@ -23,7 +23,7 @@ public:
     {
         if (DepartmentView->objectName().isEmpty())
             DepartmentView->setObjectName(QString::fromUtf8("DepartmentView"));
-        DepartmentView->resize(626, 430);
+        DepartmentView->resize(676, 524);
 
         retranslateUi(DepartmentView);
 

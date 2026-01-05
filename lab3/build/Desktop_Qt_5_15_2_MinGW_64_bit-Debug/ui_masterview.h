@@ -38,7 +38,7 @@ public:
     {
         if (MasterView->objectName().isEmpty())
             MasterView->setObjectName(QString::fromUtf8("MasterView"));
-        MasterView->resize(630, 401);
+        MasterView->resize(676, 543);
         verticalLayout = new QVBoxLayout(MasterView);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();

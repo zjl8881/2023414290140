@@ -45,7 +45,7 @@ public:
     {
         if (WelcomeView->objectName().isEmpty())
             WelcomeView->setObjectName(QString::fromUtf8("WelcomeView"));
-        WelcomeView->resize(668, 455);
+        WelcomeView->resize(674, 521);
         horizontalLayout_2 = new QHBoxLayout(WelcomeView);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout = new QHBoxLayout();

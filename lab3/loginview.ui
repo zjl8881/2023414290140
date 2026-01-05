@@ -147,13 +147,6 @@
      </property>
     </spacer>
    </item>
-   <item>
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>张嘉亮 2023414290140</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>

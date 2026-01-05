@@ -23,7 +23,7 @@ public:
     {
         if (DoctorView->objectName().isEmpty())
             DoctorView->setObjectName(QString::fromUtf8("DoctorView"));
-        DoctorView->resize(628, 419);
+        DoctorView->resize(646, 512);
 
         retranslateUi(DoctorView);
 

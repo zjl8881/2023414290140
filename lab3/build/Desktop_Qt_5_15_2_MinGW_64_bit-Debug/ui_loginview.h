@@ -43,7 +43,6 @@ public:
     QPushButton *btSignIn;
     QSpacerItem *horizontalSpacer;
     QSpacerItem *verticalSpacer_3;
-    QLabel *label_4;
 
     void setupUi(QWidget *LoginView)
     {
@@ -138,11 +137,6 @@ public:
 
         verticalLayout_4->addItem(verticalSpacer_3);
 
-        label_4 = new QLabel(LoginView);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-
-        verticalLayout_4->addWidget(label_4);
-
 
         retranslateUi(LoginView);
 
@@ -157,7 +151,6 @@ public:
         label_3->setText(QCoreApplication::translate("LoginView", "\345\257\206\347\240\201\357\274\232", nullptr));
         btSignUp->setText(QCoreApplication::translate("LoginView", "\346\263\250\345\206\214", nullptr));
         btSignIn->setText(QCoreApplication::translate("LoginView", "\347\231\273\345\275\225", nullptr));
-        label_4->setText(QCoreApplication::translate("LoginView", "\345\274\240\345\230\211\344\272\256 2023414290140", nullptr));
     } // retranslateUi
 
 };

@@ -63,7 +63,7 @@ public:
     {
         if (PatientEditView->objectName().isEmpty())
             PatientEditView->setObjectName(QString::fromUtf8("PatientEditView"));
-        PatientEditView->resize(612, 483);
+        PatientEditView->resize(654, 549);
         verticalLayout_4 = new QVBoxLayout(PatientEditView);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalSpacer_3 = new QSpacerItem(20, 80, QSizePolicy::Minimum, QSizePolicy::Expanding);

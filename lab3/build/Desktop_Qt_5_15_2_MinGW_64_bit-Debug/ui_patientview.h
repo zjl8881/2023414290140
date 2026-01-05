@@ -37,7 +37,7 @@ public:
     {
         if (PatientView->objectName().isEmpty())
             PatientView->setObjectName(QString::fromUtf8("PatientView"));
-        PatientView->resize(650, 484);
+        PatientView->resize(689, 556);
         verticalLayout = new QVBoxLayout(PatientView);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
