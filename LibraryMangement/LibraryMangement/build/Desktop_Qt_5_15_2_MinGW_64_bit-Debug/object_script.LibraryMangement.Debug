@@ -1,0 +1,15 @@
+debug/idatabase.o
+debug/loginview.o
+debug/main.o
+debug/mainwindow.o
+debug/masterview.o
+debug/patienteditview.o
+debug/patientview.o
+debug/welcomeview.o
+debug/moc_idatabase.o
+debug/moc_loginview.o
+debug/moc_mainwindow.o
+debug/moc_masterview.o
+debug/moc_patienteditview.o
+debug/moc_patientview.o
+debug/moc_welcomeview.o
