@@ -1,18 +1,18 @@
-// book.cpp
 #include "book.h"
 
-Book::Book(const QString& id, const QString& name, const QString& author, int count)
-    : m_id(id), m_name(name), m_author(author), m_count(count)
-{}
+Book::Book(QString id, QString name, QString author, QString press, double price, int stock)
+    : bookId(id), bookName(name), bookAuthor(author), bookPress(press), bookPrice(price), bookStock(stock) {}
 
-QString Book::id() const { return m_id; }
-void Book::setId(const QString& id) { m_id = id; }
+QString Book::getId() const { return bookId; }
+QString Book::getName() const { return bookName; }
+QString Book::getAuthor() const { return bookAuthor; }
+QString Book::getPress() const { return bookPress; }
+double Book::getPrice() const { return bookPrice; }
+int Book::getStock() const { return bookStock; }
 
-QString Book::name() const { return m_name; }
-void Book::setName(const QString& name) { m_name = name; }
-
-QString Book::author() const { return m_author; }
-void Book::setAuthor(const QString& author) { m_author = author; }
-
-int Book::count() const { return m_count; }
-void Book::setCount(int count) { m_count = count; }
+void Book::setId(QString id) { bookId = id; }
+void Book::setName(QString name) { bookName = name; }
+void Book::setAuthor(QString author) { bookAuthor = author; }
+void Book::setPress(QString press) { bookPress = press; }
+void Book::setPrice(double price) { bookPrice = price; }
+void Book::setStock(int stock) { bookStock = stock; }

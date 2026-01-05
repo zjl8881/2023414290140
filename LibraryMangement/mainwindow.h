@@ -1,28 +1,25 @@
-// mainwindow.h
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <QMainWindow>
-#include "bookmanager.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+// 提前声明UI类（避免循环引用）
+namespace Ui {
+class MainWindow;
+}
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT  // 若勾选了Add Q_OBJECT，则需添加
+class BookManager; // 提前声明BookManager类
+
+class MainWindow : public QMainWindow {
+    Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    // 自定义槽函数（比如“添加图书”按钮点击）
-    void onAddBookClicked();
-
 private:
-    Ui::MainWindow *ui;
-    BookManager m_bookManager;  // 图书管理实例
+    Ui::MainWindow *ui; // UI对象指针
+    BookManager *bookMgr; // 数据库管理器对象
 };
 
 #endif // MAINWINDOW_H

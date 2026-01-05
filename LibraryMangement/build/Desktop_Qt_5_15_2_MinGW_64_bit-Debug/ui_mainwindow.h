@@ -32,7 +32,7 @@ public:
     {
         if (mainwindow->objectName().isEmpty())
             mainwindow->setObjectName(QString::fromUtf8("mainwindow"));
-        mainwindow->resize(600, 400);
+        mainwindow->resize(891, 628);
         centralWidget = new QWidget(mainwindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);

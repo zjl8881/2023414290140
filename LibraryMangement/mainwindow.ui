@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>891</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,6 @@
    </layout>
   </widget>
  </widget>
- <!-- 正确写法：空标签用 "/>" 闭合 -->
  <resources/>
  <connections/>
 </ui>

@@ -250,6 +250,7 @@ Makefile: ../../LibraryMangement.pro ../../../../5.15.2/mingw81_64/mkspecs/featu
 		../../LibraryMangement.pro \
 		../../../../5.15.2/mingw81_64/lib/Qt5Widgets.prl \
 		../../../../5.15.2/mingw81_64/lib/Qt5Gui.prl \
+		../../../../5.15.2/mingw81_64/lib/Qt5Sql.prl \
 		../../../../5.15.2/mingw81_64/lib/Qt5Core.prl \
 		../../../../5.15.2/mingw81_64/lib/qtmain.prl \
 		../../../../5.15.2/mingw81_64/mkspecs/features/build_pass.prf
@@ -434,6 +435,7 @@ Makefile: ../../LibraryMangement.pro ../../../../5.15.2/mingw81_64/mkspecs/featu
 ../../LibraryMangement.pro:
 ../../../../5.15.2/mingw81_64/lib/Qt5Widgets.prl:
 ../../../../5.15.2/mingw81_64/lib/Qt5Gui.prl:
+../../../../5.15.2/mingw81_64/lib/Qt5Sql.prl:
 ../../../../5.15.2/mingw81_64/lib/Qt5Core.prl:
 ../../../../5.15.2/mingw81_64/lib/qtmain.prl:
 ../../../../5.15.2/mingw81_64/mkspecs/features/build_pass.prf:

@@ -1,25 +1,31 @@
-// bookmanager.h
 #ifndef BOOKMANAGER_H
 #define BOOKMANAGER_H
-#include <QList>
+
+#include <QObject>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
 #include "book.h"
 
-class BookManager
-{
+class BookManager : public QObject {
+    Q_OBJECT
 public:
-    BookManager();
+    explicit BookManager(QObject *parent = nullptr);
+    ~BookManager();
 
-    // 添加图书
-    bool addBook(const Book& book);
-    // 删除图书（按编号）
-    bool removeBook(const QString& bookId);
-    // 查询图书（按编号）
-    Book findBook(const QString& bookId) const;
-    // 获取所有图书
-    QList<Book> allBooks() const;
+    // 数据库连接/关闭
+    bool connectDatabase();
+    void closeDatabase();
+
+    // 图书数据库操作示例（增/查）
+    bool addBook(const Book &book);       // 添加图书到数据库
+    Book queryBookById(const QString &id);// 根据编号查询图书
 
 private:
-    QList<Book> m_books;  // 存储图书列表
+    QSqlDatabase db;  // 数据库对象
+    // 初始化图书表（首次连接时创建表）
+    void initBookTable();
 };
 
 #endif // BOOKMANAGER_H

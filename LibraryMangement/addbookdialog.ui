@@ -6,16 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>706</width>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>添加图书</string>
   </property>
-  <!-- 布局容器：垂直布局，让控件按行排列 -->
   <layout class="QVBoxLayout" name="verticalLayout">
-   <!-- 第一行：图书编号 -->
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_1">
      <item>
@@ -30,7 +28,6 @@
      </item>
     </layout>
    </item>
-   <!-- 第二行：图书名称 -->
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
@@ -45,7 +42,6 @@
      </item>
     </layout>
    </item>
-   <!-- 第三行：作者 -->
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
@@ -60,7 +56,6 @@
      </item>
     </layout>
    </item>
-   <!-- 第四行：库存数量 -->
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
@@ -82,7 +77,6 @@
      </item>
     </layout>
    </item>
-   <!-- 第五行：按钮（自动对齐到下方） -->
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
