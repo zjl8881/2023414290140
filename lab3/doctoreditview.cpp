@@ -4,6 +4,8 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 #include "loghelper.h"
+#include "reportworker.h"
+#include <QThread>
 
 DoctorEditView::DoctorEditView(QWidget *parent, int index) :
     QWidget(parent),
@@ -118,4 +120,42 @@ void DoctorEditView::on_pushButton_2_clicked()  // 取消按钮
     IDatabase::getInstance().revertDoctorEdit();
     dataMapper->revert();
     emit goPreviousView();
+}
+
+void DoctorEditView::on_btReport_clicked()
+{
+    // 1. 禁用 UI 元素防止二次触发
+    ui->btReport->setEnabled(false);
+    ui->progressBar->show();
+    ui->progressBar->setValue(0);
+
+    // 2. 创建线程和 Worker
+    QThread* thread = new QThread;
+    ReportWorker* worker = new ReportWorker("doctor"); // 标识为医生报表
+    worker->moveToThread(thread);
+
+    // 3. 连接信号槽
+    // 线程启动时，执行逻辑
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+
+    // 更新 UI 进度条
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+
+    // 任务结束处理
+    connect(worker, &ReportWorker::finished, this, [=](bool success, QString msg){
+        ui->btReport->setEnabled(true);
+        ui->progressBar->hide();
+
+        if(success) QMessageBox::information(this, "成功", msg);
+        else QMessageBox::critical(this, "错误", msg);
+
+        thread->quit(); // 退出线程
+    });
+
+    // 内存清理
+    connect(thread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 4. 启动线程
+    thread->start();
 }

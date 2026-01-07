@@ -22,6 +22,7 @@ SOURCES += \
     medicinesview.cpp \
     patienteditview.cpp \
     patientview.cpp \
+    reportworker.cpp \
     signup.cpp \
     welcomeview.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
     medicinesview.h \
     patienteditview.h \
     patientview.h \
+    reportworker.h \
     signup.h \
     welcomeview.h
 

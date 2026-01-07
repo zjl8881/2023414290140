@@ -24,6 +24,7 @@ signals:
 private slots:
     void on_pushButton_clicked(); // 保存按钮点击事件
     void on_pushButton_2_clicked(); // 取消按钮点击事件
+    void on_btReport_clicked();
 
 private:
     Ui::DoctorEditView *ui;

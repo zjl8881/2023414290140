@@ -176,6 +176,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="btReport">
+         <property name="text">
+          <string>生成报表</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -205,6 +212,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

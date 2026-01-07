@@ -22,6 +22,7 @@ private slots:
     void on_btEdit_clicked();     // 修改按钮
     void on_btDelete_clicked();   // 删除按钮
     void on_btSearch_clicked();   // 查找按钮
+    void on_btReport_clicked();
 
 signals:
     void goDoctorEditView(int idx);  // 跳转到医生编辑页面的信号（和患者管理一致）
