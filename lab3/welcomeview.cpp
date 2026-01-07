@@ -33,3 +33,10 @@ void WelcomeView::on_pushButton_3_clicked()
     emit goPatientView();
 }
 
+
+void WelcomeView::on_pushButton_4_clicked()
+{
+    emit goMedicinesView();
+}
+
+

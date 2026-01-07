@@ -30,7 +30,7 @@
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>欢迎使用诊断测试系统</string>
+      <string>欢迎使用社区医疗信息管理系统</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

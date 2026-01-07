@@ -2,6 +2,7 @@
 #define PATIENTVIEW_H
 
 #include <QWidget>
+#include "idatabase.h"
 
 namespace Ui {
 class PatientView;
@@ -17,11 +18,8 @@ public:
 
 private slots:
     void on_btAdd_clicked();
-
     void on_btSearch_clicked();
-
     void on_btDelete_clicked();
-
     void on_btEdit_clicked();
 
 signals:
@@ -29,6 +27,8 @@ signals:
 
 private:
     Ui::PatientView *ui;
+    IDatabase &m_db;
+    QString m_originalFilter;
 };
 
 #endif // PATIENTVIEW_H

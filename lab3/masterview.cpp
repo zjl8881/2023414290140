@@ -1,7 +1,10 @@
- #include "masterview.h"
+#include "masterview.h"
 #include "ui_masterview.h"
 #include <QDebug>
 #include "idatabase.h"
+#include "doctoreditview.h"
+#include "departmenteditview.h"
+#include "medicineseditview.h"
 
 MasterView::MasterView(QWidget *parent):
     QWidget(parent),
@@ -23,11 +26,9 @@ MasterView::~MasterView()
 
 void MasterView::goLoginView()
 {
-
     qDebug() <<"goLoginView";
     loginView = new LoginView(this);
     pushWidgetToStackView(loginView);
-
     connect(loginView, SIGNAL(loginSuccess()), this,SLOT(goWelcomeView()));
 }
 
@@ -41,14 +42,7 @@ void MasterView::goWelcomeView()
     connect(welcomeView, SIGNAL(goDoctorView()), this,SLOT(goDoctorView()));
     connect(welcomeView, SIGNAL(goPatientView()), this,SLOT(goPatientView()));
     connect(welcomeView, SIGNAL(goDepartmentView()), this,SLOT(goDepartmentView()));
-}
-
-void MasterView::goDoctorView()
-{
-    qDebug() <<"goDoctorView";
-    doctorView = new DoctorView(this);
-    pushWidgetToStackView(doctorView);
-
+    connect(welcomeView, SIGNAL(goMedicinesView()), this,SLOT(goMedicinesView()));
 }
 
 void MasterView::goDepartmentView()
@@ -56,16 +50,31 @@ void MasterView::goDepartmentView()
     qDebug() <<"goDepartmentView";
     departmentView = new DepartmentView(this);
     pushWidgetToStackView(departmentView);
-
+    connect(departmentView, SIGNAL(goDepartmentEditView(int)), this,SLOT(goDepartmentEditView(int)));
 }
 
-void MasterView::goPatientEditView(int rowNo)
+void MasterView::goDepartmentEditView(int rowNo)
 {
-    qDebug() <<"goPatientEditView";
-    patientEditView = new PatientEditView(this, rowNo);
-    pushWidgetToStackView(patientEditView);
+    qDebug() <<"goDepartmentEditView";
+    departmentEditView = new DepartmentEditView(this, rowNo);
+    pushWidgetToStackView(departmentEditView);
+    connect(departmentEditView, SIGNAL(goPreviousView()), this,SLOT(goPreviousView()));
+}
 
-    connect(patientEditView, SIGNAL(goPreviousView()), this,SLOT(goPreviousView()));
+void MasterView::goDoctorView()
+{
+    qDebug() <<"goDoctorView";
+    doctorView = new DoctorView(this);
+    pushWidgetToStackView(doctorView);
+    connect(doctorView, SIGNAL(goDoctorEditView(int)), this,SLOT(goDoctorEditView(int)));
+}
+
+void MasterView::goDoctorEditView(int rowNo)
+{
+    qDebug() <<"goDoctorEditView";
+    doctorEditView = new DoctorEditView(this, rowNo);
+    pushWidgetToStackView(doctorEditView);
+    connect(doctorEditView, SIGNAL(goPreviousView()), this,SLOT(goPreviousView()));
 }
 
 void MasterView::goPatientView()
@@ -73,8 +82,31 @@ void MasterView::goPatientView()
     qDebug() <<"goPatientView";
     patientView = new PatientView(this);
     pushWidgetToStackView(patientView);
-
     connect(patientView, SIGNAL(goPatientEditView(int)), this,SLOT(goPatientEditView(int)));
+}
+
+void MasterView::goPatientEditView(int rowNo)
+{
+    qDebug() <<"goPatientEditView";
+    patientEditView = new PatientEditView(this, rowNo);
+    pushWidgetToStackView(patientEditView);
+    connect(patientEditView, SIGNAL(goPreviousView()), this,SLOT(goPreviousView()));
+}
+
+void MasterView::goMedicinesView()
+{
+    qDebug() <<"goMedicinesView";
+    medicinesView = new MedicinesView(this);
+    pushWidgetToStackView(medicinesView);
+    connect(medicinesView, SIGNAL(goMedicinesEditView(int)), this,SLOT(goMedicinesEditView(int)));
+}
+
+void MasterView::goMedicinesEditView(int rowNo)
+{
+    qDebug() <<"goMedicinesEditView";
+    medicinesEditView = new MedicinesEditView(this, rowNo);
+    pushWidgetToStackView(medicinesEditView);
+    connect(medicinesEditView, SIGNAL(goPreviousView()), this,SLOT(goPreviousView()));
 }
 
 void MasterView::goPreviousView()
@@ -113,7 +145,7 @@ void MasterView::on_stackedWidget_currentChanged(int arg1)
     else
         ui->btBack->setEnabled(false);
 
-        QString title = ui->stackedWidget->currentWidget()->windowTitle();
+    QString title = ui->stackedWidget->currentWidget()->windowTitle();
 
     if(title =="欢迎"){
         ui->btLogout->setEnabled(true);
@@ -127,4 +159,3 @@ void MasterView::on_btLogout_clicked()
 {
     goPreviousView();
 }
-
