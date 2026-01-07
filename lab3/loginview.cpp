@@ -8,6 +8,9 @@ LoginView::LoginView(QWidget *parent)
     , ui(new Ui::LoginView)
 {
     ui->setupUi(this);
+
+    // 设置密码输入框为密码模式
+    ui->inputUserPassword->setEchoMode(QLineEdit::Password);
 }
 
 LoginView::~LoginView()
@@ -35,4 +38,10 @@ void LoginView::on_btSignIn_clicked()
         LogHelper::getInstance().writeLog(QString("用户登录失败：用户名=%1，原因=%2").arg(userName, errMsg), "ERROR");
         emit loginFailed();
     }
+}
+
+void LoginView::on_btSignUp_clicked()
+{
+    LogHelper::getInstance().writeLog("跳转到用户注册页面", "INFO");
+    emit goSignUpView();  // 发射跳转到注册页面的信号
 }

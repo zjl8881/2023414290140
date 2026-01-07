@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QSqlTableModel>
 #include <QSqlError>
+#include "loghelper.h"
 
 MedicinesEditView::MedicinesEditView(QWidget *parent, int index)
     : QWidget(parent)
@@ -83,9 +84,10 @@ bool MedicinesEditView::validateInput()
     return true;
 }
 
-void MedicinesEditView::on_pushButton_3_clicked()
+void MedicinesEditView::on_pushButton_3_clicked()  // 保存按钮
 {
     if (!validateInput()) {
+        LogHelper::getInstance().writeLog("药品信息保存失败：输入验证未通过", "ERROR");
         return;
     }
 
@@ -95,17 +97,36 @@ void MedicinesEditView::on_pushButton_3_clicked()
 
     if (m_db && m_db->medicinesTabModel) {
         if (m_db->medicinesTabModel->submitAll()) {
+            QString medicineName = ui->dbEditName_Medicines->text();
+            QString medicineId = ui->dbEditID_Medicines->text();
+
+            if (m_editIndex >= 0) {
+                LogHelper::getInstance().writeLog(
+                    QString("药品信息修改成功：药品ID=%1，药品名称=%2").arg(medicineId).arg(medicineName),
+                    "INFO");
+            } else {
+                LogHelper::getInstance().writeLog(
+                    QString("药品信息新增成功：药品ID=%1，药品名称=%2").arg(medicineId).arg(medicineName),
+                    "INFO");
+            }
+
             QMessageBox::information(this, "提示", "保存成功！");
             emit goPreviousView();
         } else {
-            QMessageBox::critical(this, "错误", "保存失败：" + m_db->medicinesTabModel->lastError().text());
+            QString errorMsg = m_db->medicinesTabModel->lastError().text();
+            LogHelper::getInstance().writeLog(
+                QString("药品信息保存失败：%1").arg(errorMsg),
+                "ERROR");
+            QMessageBox::critical(this, "错误", "保存失败：" + errorMsg);
             m_db->medicinesTabModel->revertAll();
         }
     }
 }
 
-void MedicinesEditView::on_pushButton_4_clicked()
+void MedicinesEditView::on_pushButton_4_clicked()  // 取消按钮
 {
+    LogHelper::getInstance().writeLog("取消药品信息编辑", "INFO");
+
     if (m_db && m_db->medicinesTabModel) {
         m_db->medicinesTabModel->revertAll();
     }

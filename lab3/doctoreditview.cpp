@@ -3,6 +3,7 @@
 #include "idatabase.h"
 #include <QSqlTableModel>
 #include <QMessageBox>
+#include "loghelper.h"
 
 DoctorEditView::DoctorEditView(QWidget *parent, int index) :
     QWidget(parent),
@@ -73,28 +74,47 @@ bool DoctorEditView::validateInput()
     return true;
 }
 
-// 修改保存按钮逻辑，先验证再保存
-void DoctorEditView::on_pushButton_clicked()
+void DoctorEditView::on_pushButton_clicked()  // 保存按钮
 {
     // 新增：输入验证
     if (!validateInput()) {
+        LogHelper::getInstance().writeLog("医生信息保存失败：输入验证未通过", "ERROR");
         return;
     }
 
     dataMapper->submit();
     bool success = IDatabase::getInstance().submitDoctorEdit();
+
     if (success) {
+        QString doctorName = ui->dbEditName->text();
+        QString doctorId = ui->dbEditID_Doctor->text();
+
+        if (m_editIndex >= 0) {
+            LogHelper::getInstance().writeLog(
+                QString("医生信息修改成功：医生ID=%1，医生姓名=%2").arg(doctorId).arg(doctorName),
+                "INFO");
+        } else {
+            LogHelper::getInstance().writeLog(
+                QString("医生信息新增成功：医生ID=%1，医生姓名=%2").arg(doctorId).arg(doctorName),
+                "INFO");
+        }
+
         QMessageBox::information(this, "提示", "医生信息修改成功！");
     } else {
-        QMessageBox::critical(this, "错误", "保存失败：" + IDatabase::getInstance().doctorTabModel->lastError().text());
+        QString errorMsg = IDatabase::getInstance().doctorTabModel->lastError().text();
+        LogHelper::getInstance().writeLog(
+            QString("医生信息保存失败：%1").arg(errorMsg),
+            "ERROR");
+        QMessageBox::critical(this, "错误", "保存失败：" + errorMsg);
         IDatabase::getInstance().revertDoctorEdit();
     }
     emit goPreviousView();
 }
 
-// 取消按钮（无修改）
-void DoctorEditView::on_pushButton_2_clicked()
+void DoctorEditView::on_pushButton_2_clicked()  // 取消按钮
 {
+    LogHelper::getInstance().writeLog("取消医生信息编辑", "INFO");
+
     IDatabase::getInstance().revertDoctorEdit();
     dataMapper->revert();
     emit goPreviousView();

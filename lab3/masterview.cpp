@@ -30,6 +30,15 @@ void MasterView::goLoginView()
     loginView = new LoginView(this);
     pushWidgetToStackView(loginView);
     connect(loginView, SIGNAL(loginSuccess()), this,SLOT(goWelcomeView()));
+    connect(loginView, SIGNAL(goSignUpView()), this,SLOT(goSignUpView()));
+}
+
+void MasterView::goSignUpView()
+{
+    qDebug() <<"goSignUpView";
+    signUpView = new SignUp(this);
+    pushWidgetToStackView(signUpView);
+    connect(signUpView, SIGNAL(goBackToLogin()), this,SLOT(goLoginView()));  // 连接返回登录信号
 }
 
 void MasterView::goWelcomeView()

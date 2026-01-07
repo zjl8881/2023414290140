@@ -18,12 +18,16 @@ public:
 private slots:
     void on_btSignIn_clicked();
 
+private:
+    Ui::LoginView *ui;
+
+private slots:
+    void on_btSignUp_clicked();  // 添加注册按钮点击事件
+
 signals:
     void loginSuccess();
     void loginFailed();
-
-private:
-    Ui::LoginView *ui;
+    void goSignUpView();  // 新增：跳转到注册页面信号
 };
 
 #endif // LOGINVIEW_H

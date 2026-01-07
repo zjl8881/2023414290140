@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDataWidgetMapper>
+#include "idatabase.h"
 
 namespace Ui {
 class PatientEditView;
@@ -24,6 +25,7 @@ private slots:
 private:
     Ui::PatientEditView *ui;
     QDataWidgetMapper *dataMapper;
+    int m_editIndex;
 
 signals:
     void goPreviousView();
