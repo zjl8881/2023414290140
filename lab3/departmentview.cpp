@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include "loghelper.h"
+#include <QThread>
+#include "reportworker.h"
 
 DepartmentView::DepartmentView(QWidget *parent)
     : QWidget(parent)
@@ -134,4 +136,37 @@ void DepartmentView::on_btSearch_clicked()
         QMessageBox::critical(this, "错误", "搜索失败：" + errMsg);
         LogHelper::getInstance().writeLog(QString("科室搜索失败：关键词=%1，错误信息=%2").arg(searchText, errMsg), "ERROR");
     }
+}
+
+void DepartmentView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("department");
+    worker->moveToThread(thread);
+
+    // 连接信号
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &DepartmentView::handleReportFinished);
+
+    // 线程清理
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void DepartmentView::handleReportFinished(bool success, QString message)
+{
+    if (success) {
+        QMessageBox::information(this, "成功", message);
+    } else {
+        QMessageBox::critical(this, "错误", message);
+    }
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
 }

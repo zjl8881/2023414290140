@@ -3,6 +3,9 @@
 #include "idatabase.h"
 #include <QSqlTableModel>
 #include "loghelper.h"
+#include <QThread>
+#include "reportworker.h"
+#include <QMessageBox>
 
 PatientEditView::PatientEditView(QWidget *parent,int index):
     QWidget(parent),
@@ -56,10 +59,43 @@ void PatientEditView::on_pushButton_clicked()  // 保存按钮
     emit goPreviousView();
 }
 
+
 void PatientEditView::on_pushButton_2_clicked()  // 取消按钮
 {
     LogHelper::getInstance().writeLog("取消患者信息编辑", "INFO");
 
     IDatabase::getInstance().revertPatientEdit();
     emit goPreviousView();
+}
+
+
+void PatientEditView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("patient");
+    worker->moveToThread(thread);
+
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &PatientEditView::handleReportFinished);
+
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void PatientEditView::handleReportFinished(bool success, QString message)
+{
+    if (success) {
+        QMessageBox::information(this, "成功", message);
+    } else {
+        QMessageBox::critical(this, "错误", message);
+    }
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
 }

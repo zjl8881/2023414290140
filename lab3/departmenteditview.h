@@ -22,6 +22,8 @@ public:
 private slots:
     void on_pushButton_3_clicked();  // 保存按钮
     void on_pushButton_4_clicked();  // 取消按钮
+    void on_btReport_clicked();
+    void handleReportFinished(bool success, QString message);
 
 private:
     Ui::DepartmentEditView *ui;

@@ -27,6 +27,9 @@ private slots:
     void on_btEdit_clicked();
     void on_btDelete_clicked();
     void on_btSearch_clicked();
+    void handleReportFinished(bool success, QString message);
+
+    void on_btReport_clicked();
 
 signals:
     void goMedicinesEditView(int index);

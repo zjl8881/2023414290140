@@ -4,6 +4,8 @@
 #include <QDateTime>
 #include <QUuid>
 #include "loghelper.h"
+#include <QThread>
+#include "reportworker.h"
 
 DepartmentEditView::DepartmentEditView(QWidget *parent, int index)
     : QWidget(parent)
@@ -136,4 +138,37 @@ void DepartmentEditView::on_pushButton_4_clicked()  // 取消按钮
     m_db.departmentTabModel->revertAll();
     dataMapper->revert(); // 同步回滚UI
     emit goPreviousView();
+}
+
+void DepartmentEditView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("department");
+    worker->moveToThread(thread);
+
+    // 连接信号
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &DepartmentEditView::handleReportFinished);
+
+    // 线程清理
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void DepartmentEditView::handleReportFinished(bool success, QString message)
+{
+    if (success) {
+        QMessageBox::information(this, "成功", message);
+    } else {
+        QMessageBox::critical(this, "错误", message);
+    }
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
 }

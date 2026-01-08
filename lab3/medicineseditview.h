@@ -22,6 +22,8 @@ public:
 private slots:
     void on_pushButton_3_clicked();  // 保存
     void on_pushButton_4_clicked();  // 取消
+    void on_btReport_clicked();
+    void handleReportFinished(bool success, QString message);
 
 private:
     Ui::MedicinesEditView *ui;

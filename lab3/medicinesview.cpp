@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include "loghelper.h"
+#include <QThread>
+#include "reportworker.h"
 
 MedicinesView::MedicinesView(QWidget *parent)
     : QWidget(parent)
@@ -141,4 +143,33 @@ void MedicinesView::on_btSearch_clicked()
         QMessageBox::critical(this, "错误", "搜索失败：" + errMsg);
         LogHelper::getInstance().writeLog(QString("药品搜索失败：关键词=%1，错误信息=%2").arg(searchText, errMsg), "ERROR");
     }
+}
+
+void MedicinesView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("medicine");
+    worker->moveToThread(thread);
+
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &MedicinesView::handleReportFinished);
+
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void MedicinesView::handleReportFinished(bool success, QString message)
+{
+    if (success) QMessageBox::information(this, "报表生成", message);
+    else QMessageBox::critical(this, "生成失败", message);
+
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
 }

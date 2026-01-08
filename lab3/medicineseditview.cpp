@@ -5,6 +5,8 @@
 #include <QSqlTableModel>
 #include <QSqlError>
 #include "loghelper.h"
+#include <QThread>
+#include "reportworker.h"
 
 MedicinesEditView::MedicinesEditView(QWidget *parent, int index)
     : QWidget(parent)
@@ -134,4 +136,33 @@ void MedicinesEditView::on_pushButton_4_clicked()  // 取消按钮
         dataMapper->revert();
     }
     emit goPreviousView();
+}
+
+void MedicinesEditView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("medicine");
+    worker->moveToThread(thread);
+
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &MedicinesEditView::handleReportFinished);
+
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void MedicinesEditView::handleReportFinished(bool success, QString message)
+{
+    if (success) QMessageBox::information(this, "报表生成", message);
+    else QMessageBox::critical(this, "生成失败", message);
+
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
 }

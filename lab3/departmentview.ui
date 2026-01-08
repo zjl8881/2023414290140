@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>676</width>
-    <height>524</height>
+    <width>534</width>
+    <height>418</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,10 +51,27 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btReport">
+       <property name="text">
+        <string>生成报表</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
     <widget class="QTableView" name="tableView"/>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progressBar">
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

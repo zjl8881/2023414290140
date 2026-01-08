@@ -21,6 +21,9 @@ private slots:
     void on_btEdit_clicked();
     void on_btDelete_clicked();
     void on_btSearch_clicked();
+    void handleReportFinished(bool success, QString message);
+    
+    void on_btReport_clicked();
 
 signals:
     void goDepartmentEditView(int idx);  // 新增：跳转编辑页信号（对齐PatientView）

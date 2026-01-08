@@ -3,7 +3,10 @@
 #include "idatabase.h"
 #include <QMessageBox>
 #include "loghelper.h"
-
+#include <QThread>
+#include "reportworker.h"
+#include <QThread>
+#include "reportworker.h"
 
 PatientView::PatientView(QWidget *parent)
     : QWidget(parent)
@@ -102,3 +105,32 @@ void PatientView::on_btEdit_clicked()
 
     emit goPatientEditView(curIndex.row());
 }
+
+void PatientView::on_btReport_clicked()
+{
+    ui->btReport->setEnabled(false);
+    ui->progressBar->setValue(0);
+
+    QThread *thread = new QThread;
+    ReportWorker *worker = new ReportWorker("patient");
+    worker->moveToThread(thread);
+
+    connect(thread, &QThread::started, worker, &ReportWorker::process);
+    connect(worker, &ReportWorker::progressUpdated, ui->progressBar, &QProgressBar::setValue);
+    connect(worker, &ReportWorker::finished, this, &PatientView::handleReportFinished);
+
+    connect(worker, &ReportWorker::finished, thread, &QThread::quit);
+    connect(worker, &ReportWorker::finished, worker, &ReportWorker::deleteLater);
+    connect(thread, &QThread::finished, thread, &QThread::deleteLater);
+
+    thread->start();
+}
+
+void PatientView::handleReportFinished(bool success, QString message)
+{
+    QMessageBox::information(this, success ? "提示" : "错误", message);
+    ui->btReport->setEnabled(true);
+    ui->progressBar->setValue(0);
+}
+
+

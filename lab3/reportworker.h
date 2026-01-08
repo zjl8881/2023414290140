@@ -7,17 +7,18 @@ class ReportWorker : public QObject
 {
     Q_OBJECT
 public:
+    // 构造函数接收业务类型：doctor, department, patient, medicines
     explicit ReportWorker(QString type, QObject *parent = nullptr);
 
 public slots:
-    void process(); // 耗时任务入口
+    void process(); // 耗时统计任务
 
 signals:
-    void progressUpdated(int value); // 进度信号
-    void finished(bool success, QString message); // 完成信号
+    void progressUpdated(int value);
+    void finished(bool success, QString message);
 
 private:
-    QString m_type; // 区分是 "doctor" 还是 "department"
+    QString m_type;
 };
 
 #endif
