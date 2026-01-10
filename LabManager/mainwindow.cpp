@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(DbManager::getInstance().initDeviceModel()){
         QSqlTableModel *model = DbManager::getInstance().deviceTabModel;
         model->setHeaderData(0, Qt::Horizontal, "设备ID");
-        model->setHeaderData(1, Qt::Horizontal, "设备名称");
+        model->setHeaderData(1, Qt::Horizontal, "设备名称");阿伟大碗大碗·
         model->setHeaderData(2, Qt::Horizontal, "规格型号");
         model->setHeaderData(3, Qt::Horizontal, "库存总数");
         model->setHeaderData(4, Qt::Horizontal, "可使用数");
