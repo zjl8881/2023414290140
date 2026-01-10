@@ -10,7 +10,7 @@
 #include "welcomeview.h"
 #include "departmenteditview.h"
 #include "medicinesview.h"
-#include "medicineseditview.h"去问驱蚊器为
+#include "medicineseditview.h"
 #include "signup.h"  // 新增包含
 
 
