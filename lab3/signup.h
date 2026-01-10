@@ -12,7 +12,7 @@ class SignUp : public QWidget
     Q_OBJECT
 
 public:
-    explicit SignUp(QWidget *parent = nullptr);委屈委屈委屈委屈我
+    explicit SignUp(QWidget *parent = nullptr);
     ~SignUp();
 
 private slots:

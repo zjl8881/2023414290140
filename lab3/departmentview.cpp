@@ -5,7 +5,7 @@
 #include <QSqlQuery>
 #include "loghelper.h"
 #include <QThread>
-#include "reportworker.h"
+#include "reportworker.h"去问驱蚊器为
 
 DepartmentView::DepartmentView(QWidget *parent)
     : QWidget(parent)
