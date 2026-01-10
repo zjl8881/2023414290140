@@ -22,7 +22,7 @@ private slots:
     void on_pushButton_clicked();
     void on_btReport_clicked();
     void handleReportFinished(bool success, QString message);
-
+1231231231232
 
 private:
     Ui::PatientEditView *ui;

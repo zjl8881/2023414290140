@@ -15,7 +15,7 @@ class DoctorEditView : public QWidget
     Q_OBJECT
 
 public:
-    explicit DoctorEditView(QWidget *parent = nullptr, int index = 0);awdawdawd
+    explicit DoctorEditView(QWidget *parent = nullptr, int index = 0);
     ~DoctorEditView();
 
 signals:
