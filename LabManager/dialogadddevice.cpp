@@ -10,8 +10,8 @@ DialogAddDevice::DialogAddDevice(QWidget *parent)
 }
 
 // 新增：补充缺失的析构函数实现，解决链接报错
-DialogAddDevice::~DialogAddDevice()哇大碗大碗大碗
-{
+DialogAddDevice::~DialogAddDevice()
+{12312312
     delete ui;
 }
 
