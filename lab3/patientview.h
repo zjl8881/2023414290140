@@ -17,7 +17,7 @@ public:
     ~PatientView();
 
 private slots:
-    void on_btAdd_clicked();11123123121
+    void on_btAdd_clicked();
     void on_btSearch_clicked();
     void on_btDelete_clicked();
     void on_btEdit_clicked();

@@ -12,7 +12,7 @@ class PatientEditView;
 class PatientEditView : public QWidget
 {
     Q_OBJECT
-企鹅其额2
+
 public:
     explicit PatientEditView(QWidget *parent = nullptr, int index = 0);
     ~PatientEditView();
