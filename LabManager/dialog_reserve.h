@@ -1,5 +1,5 @@
 #ifndef DIALOG_RESERVE_H
-#define DIALOG_RESERVE_H
+#define DIALOG_RESERVE_H1
 
 #include <QDialog>
 
