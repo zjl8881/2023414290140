@@ -13,7 +13,7 @@ class DepartmentView : public QWidget
     Q_OBJECT
 
 public:
-    explicit DepartmentView(QWidget *parent = nullptr);ASDASDASD
+    explicit DepartmentView(QWidget *parent = nullptr);
     ~DepartmentView();
 
 private slots:

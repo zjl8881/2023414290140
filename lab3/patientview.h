@@ -13,7 +13,7 @@ class PatientView : public QWidget
     Q_OBJECT
 
 public:
-    explicit PatientView(QWidget *parent = nullptr);
+    explicit PatientView(QWidget *parent = nullptr);ASDSDSADA
     ~PatientView();
 
 private slots:
