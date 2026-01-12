@@ -26,7 +26,7 @@ void SignUp::on_pushButton_clicked()  // 创建按钮
     // 获取用户输入
     QString fullName = ui->dbEditFullName->text().trimmed();
     QString userName = ui->dbEditUserName->text().trimmed();
-    QString password = ui->dbEditPassWord->text().trimmed();
+    QString password = ui->dbEditPassWord->text().trimmed();WASDAWDAWDAWS
 
     // 输入验证
     if (fullName.isEmpty()) {
