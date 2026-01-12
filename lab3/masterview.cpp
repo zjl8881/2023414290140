@@ -140,7 +140,7 @@ void MasterView::pushWidgetToStackView(QWidget *widget)
 }
 
 
-void MasterView::on_btBack_clicked()
+void MasterView::on_btBack_clicked()AWDAWDAW
 {
     goPreviousView();
 }

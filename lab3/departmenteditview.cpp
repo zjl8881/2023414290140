@@ -7,7 +7,7 @@
 #include <QThread>
 #include "reportworker.h"
 
-DepartmentEditView::DepartmentEditView(QWidget *parent, int index)SSSSSSSSSSSS
+DepartmentEditView::DepartmentEditView(QWidget *parent, int index)
     : QWidget(parent)
     , ui(new Ui::DepartmentEditView)
     , m_db(IDatabase::getInstance())
