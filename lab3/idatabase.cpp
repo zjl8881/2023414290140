@@ -15,7 +15,7 @@ void IDatabase::ininDatabase()
         qDebug() <<  "open database is ok" << database.connectionName()  ;
 }
 
-bool IDatabase::initPatientModel()231321
+bool IDatabase::initPatientModel()
 {
     patientTabModel = new QSqlTableModel(this, database);
     patientTabModel->setTable("patient");

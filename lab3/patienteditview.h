@@ -18,7 +18,7 @@ public:
     ~PatientEditView();
 
 private slots:
-    void on_pushButton_2_clicked();
+    void on_pushButton_2_clicked();AAAAAA
     void on_pushButton_clicked();
     void on_btReport_clicked();
     void handleReportFinished(bool success, QString message);
