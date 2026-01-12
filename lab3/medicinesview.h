@@ -20,10 +20,10 @@ public:
 private:
     Ui::MedicinesView *ui;
     IDatabase &m_db;
-    QString m_originalFilter;  // 修改为成员变量
+    QString m_originalFilter;
 
 private slots:
-    void on_btAdd_clicked();     // 必须与ui文件中的槽名称完全一致
+    void on_btAdd_clicked();
     void on_btEdit_clicked();
     void on_btDelete_clicked();
     void on_btSearch_clicked();

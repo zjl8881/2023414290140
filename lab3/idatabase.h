@@ -6,8 +6,7 @@
 #include <qsqldatabase>
 #include <QDebug>
 #include <QDataWidgetMapper>
-#include <QUuid>  // 新增：用于生成唯一ID
-
+#include <QUuid>
 class IDatabase : public QObject
 {
     Q_OBJECT
@@ -31,7 +30,7 @@ private:
 signals:
 
 public:
-    // 患者相关（原有）
+    // 患者相关
     bool initPatientModel();
     int addNewPatient();
     bool searchPatient(QString filter);
@@ -39,7 +38,7 @@ public:
     bool submitPatientEdit();
     void revertPatientEdit();
 
-    // 医生相关（补充模仿患者的方法）
+    // 医生相关
     int addNewDoctor();
     bool submitDoctorEdit();
     void revertDoctorEdit();

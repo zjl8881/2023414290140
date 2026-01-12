@@ -53,7 +53,7 @@ DoctorEditView::DoctorEditView(QWidget *parent, int index) :
         dataMapper->setCurrentIndex(index);
     }
 
-    // 5. 关键修改：ID字段改为可编辑（添加/修改都能改）
+    // 5. 关键修改：ID字段改为可编辑
     ui->dbEditID_Doctor->setReadOnly(false); // 从true改为false，放开编辑限制
 }
 

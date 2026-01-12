@@ -26,7 +26,7 @@ private slots:
     void on_btReport_clicked();
 
 signals:
-    void goDepartmentEditView(int idx);  // 新增：跳转编辑页信号（对齐PatientView）
+    void goDepartmentEditView(int idx);  // 跳转编辑页信号
 
 private:
     Ui::DepartmentView *ui;

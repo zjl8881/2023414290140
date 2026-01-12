@@ -17,7 +17,6 @@ MedicinesEditView::MedicinesEditView(QWidget *parent, int index)
 {
     ui->setupUi(this);
 
-    // 获取IDatabase实例
     m_db = &IDatabase::getInstance();
 
     if (!m_db->medicinesTabModel) {

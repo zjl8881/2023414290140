@@ -8,7 +8,6 @@ namespace Ui {
 class MedicinesEditView;
 }
 
-// 前向声明，避免循环包含
 class IDatabase;
 
 class MedicinesEditView : public QWidget

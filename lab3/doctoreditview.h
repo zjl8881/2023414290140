@@ -3,7 +3,7 @@
 #define DOCTOREDITVIEW_H
 
 #include <QWidget>
-#include <QDataWidgetMapper> // 必须包含头文件
+#include <QDataWidgetMapper>
 #include "IDatabase.h"
 
 namespace Ui {
@@ -19,7 +19,7 @@ public:
     ~DoctorEditView();
 
 signals:
-    void goPreviousView(); // 返回上一页的信号（匹配PatientEditView）
+    void goPreviousView(); // 返回上一页的信号
 
 private slots:
     void on_pushButton_clicked(); // 保存按钮点击事件
@@ -29,7 +29,7 @@ private slots:
 private:
     Ui::DoctorEditView *ui;
     int m_editIndex; // 当前编辑行索引
-    QDataWidgetMapper *dataMapper; // 数据映射器（核心：绑定UI和数据库）
+    QDataWidgetMapper *dataMapper; // 数据映射器
       bool validateInput();
 };
 

@@ -11,7 +11,7 @@
 #include "departmenteditview.h"
 #include "medicinesview.h"
 #include "medicineseditview.h"
-#include "signup.h"  // 新增包含
+#include "signup.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -40,7 +40,7 @@ public slots:
     void goPatientEditView(int rowNo);
     void goMedicinesView();
     void goMedicinesEditView(int rowNo);
-    void goSignUpView();  // 新增：跳转到注册页面
+    void goSignUpView();
 
 private slots:
     void on_btBack_clicked();
@@ -62,6 +62,6 @@ private:
     PatientEditView *patientEditView;
     MedicinesView *medicinesView;
     MedicinesEditView *medicinesEditView;
-    SignUp *signUpView;  // 新增：注册页面指针
+    SignUp *signUpView;
 };
 #endif // MASTERVIEW_H

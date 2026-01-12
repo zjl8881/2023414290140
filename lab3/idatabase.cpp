@@ -58,7 +58,7 @@ bool IDatabase::initDoctorModel()
     doctorTabModel->setTable("doctor");
     doctorTabModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
 
-    // 2. 设置中文字段表头（核心新增逻辑）
+    // 2. 设置中文字段表头
     int idIndex = doctorTabModel->fieldIndex("ID");
     int nameIndex = doctorTabModel->fieldIndex("NAME");
     int employeeOnIndex = doctorTabModel->fieldIndex("EMPLOYEEON");

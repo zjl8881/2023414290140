@@ -1,21 +1,22 @@
 #ifndef DEPARTMENTEDITVIEW_H
 #define DEPARTMENTEDITVIEW_H
 
-#include <QWidget>  // 替换QDialog为QWidget
-#include <QDataWidgetMapper>  // 新增数据映射器（和PatientEditView一致）
+#include <QWidget>
+#include <QDataWidgetMapper>
 #include "idatabase.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class DepartmentEditView; }
+namespace Ui {
+class DepartmentEditView;
+}
 QT_END_NAMESPACE
 
-// 移除EditType枚举（后续通过行索引区分新增/编辑：-1=新增，>=0=编辑）
+
 class DepartmentEditView : public QWidget  // 继承QWidget而非QDialog
 {
     Q_OBJECT
 
 public:
-    // 构造函数对齐PatientEditView：parent + 编辑行索引
     explicit DepartmentEditView(QWidget *parent = nullptr, int index = -1);
     ~DepartmentEditView();
 
@@ -28,14 +29,14 @@ private slots:
 private:
     Ui::DepartmentEditView *ui;
     IDatabase &m_db;
-    int m_editIndex;  // 编辑行索引：-1=新增，>=0=编辑
-    QDataWidgetMapper *dataMapper;   // 数据映射器（和PatientEditView一致）
+    int m_editIndex;
+    QDataWidgetMapper *dataMapper;   // 数据映射器
 
     void loadDepartmentData();  // 加载选中科室数据
     bool validateInput();       // 输入验证
 
 signals:
-    void goPreviousView();  // 返回上一页信号（和PatientEditView一致）
+    void goPreviousView();  // 返回上一页信号
 };
 
 #endif // DEPARTMENTEDITVIEW_H

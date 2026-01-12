@@ -6,7 +6,7 @@
 // 单例实例实现
 LogHelper& LogHelper::getInstance()
 {
-    static LogHelper instance;  // 局部静态变量，保证唯一且线程安全
+    static LogHelper instance;
     return instance;
 }
 

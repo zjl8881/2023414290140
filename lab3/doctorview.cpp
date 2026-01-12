@@ -15,7 +15,7 @@ DoctorView::DoctorView(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 表格配置（不变）
+    // 表格配置
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -29,7 +29,7 @@ DoctorView::DoctorView(QWidget *parent)
         }
     }
 
-    // 绑定模型（不变）
+    // 绑定模型
     ui->tableView->setModel(m_db.doctorTabModel);
     ui->tableView->setSelectionModel(m_db.theDoctorSelection);
     m_originalFilter = m_db.doctorTabModel->filter();
@@ -103,7 +103,7 @@ void DoctorView::on_btDelete_clicked()
     }
 }
 
-// 查找按钮（模糊搜索姓名）
+// 查找按钮
 void DoctorView::on_btSearch_clicked()
 {
     if (!m_db.doctorTabModel) {

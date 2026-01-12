@@ -15,13 +15,11 @@ PatientView::PatientView(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 表格配置（原有逻辑）
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableView->setAlternatingRowColors(true);
 
-    // 绑定患者表模型（替换原有iDatabase为m_db）
     if(m_db.initPatientModel()){
         ui->tableView->setModel(m_db.patientTabModel);
         ui->tableView->setSelectionModel(m_db.thePatientSelection);
@@ -43,7 +41,6 @@ void PatientView::on_btAdd_clicked()
 
 void PatientView::on_btSearch_clicked()
 {
-    // 替换iDatabase为m_db
     if (!m_db.patientTabModel) {
         QMessageBox::warning(this, "警告", "患者数据模型未初始化！");
         LogHelper::getInstance().writeLog("患者搜索失败：数据模型未初始化", "ERROR");

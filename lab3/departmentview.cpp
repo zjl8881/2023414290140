@@ -14,13 +14,13 @@ DepartmentView::DepartmentView(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 表格配置（不变）
+
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableView->setAlternatingRowColors(true);
 
-    // 绑定科室表模型（不变）
+
     if(m_db.initDepartmentModel()){
         ui->tableView->setModel(m_db.departmentTabModel);
         ui->tableView->setSelectionModel(m_db.theDepartmentSelection);
@@ -55,7 +55,7 @@ void DepartmentView::on_btAdd_clicked()
     emit goDepartmentEditView(-1);
 }
 
-// 编辑按钮（对齐PatientView的edit逻辑：发信号跳转，不弹窗）
+// 编辑按钮
 void DepartmentView::on_btEdit_clicked()
 {
     QModelIndexList selectedIndexes = ui->tableView->selectionModel()->selectedRows();
@@ -68,7 +68,7 @@ void DepartmentView::on_btEdit_clicked()
     emit goDepartmentEditView(selectedRow);
 }
 
-// 删除按钮（逻辑不变）
+// 删除按钮
 void DepartmentView::on_btDelete_clicked()
 {
     QModelIndexList selectedIndexes = ui->tableView->selectionModel()->selectedRows();
@@ -100,7 +100,7 @@ void DepartmentView::on_btDelete_clicked()
     }
 }
 
-// 查找按钮（逻辑不变）
+// 查找按钮
 void DepartmentView::on_btSearch_clicked()
 {
     if (!m_db.departmentTabModel) {
