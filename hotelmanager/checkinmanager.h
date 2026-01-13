@@ -15,12 +15,12 @@ class CheckInManager : public QDialog
     Q_OBJECT
 
 public:
-    explicit CheckInManager(QWidget *parent = nullptr);q味请问
+    explicit CheckInManager(QWidget *parent = nullptr);
     ~CheckInManager();
 
 private slots:
     // 按钮槽函数
-    void on_btnCheckIn_clicked();
+    void on_btnCheckIn_clicked();去问驱蚊器为
     void on_btnCancel_clicked();
     void on_btnRefresh_clicked();
     
