@@ -1,12 +1,12 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
-啊伟大伟大
+
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlTableModel>
 #include <QItemSelectionModel>
-#include <QSqlRecord>
+#include <QSqlRecord>啊伟大伟大
 #include <QDateTime>
 #include <QVariant>
 #include <QDebug>
