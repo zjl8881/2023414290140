@@ -15,7 +15,7 @@ class CheckInManager : public QDialog
     Q_OBJECT
 
 public:
-    explicit CheckInManager(QWidget *parent = nullptr);q委屈委屈我
+    explicit CheckInManager(QWidget *parent = nullptr);
     ~CheckInManager();
 
 private slots:
