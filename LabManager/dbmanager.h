@@ -1,6 +1,6 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
-
+啊伟大伟大
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -19,7 +19,7 @@ public:
     }
 
     QSqlTableModel *deviceTabModel;
-    QSqlTableModel *recordsTabModel;阿伟大碗大碗
+    QSqlTableModel *recordsTabModel;
     QItemSelectionModel *theDeviceSelection;
 
     void initDatabase() {
