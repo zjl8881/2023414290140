@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <QThread>
 #include <QInputDialog>
-#include "dialogadddevice.h"我去恶趣味
+#include "dialogadddevice.h"
 #include <QSqlQuery>
 
 MainWindow::MainWindow(QWidget *parent)
