@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>酒店入住与预订管理系统</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>酒店入住与预订管理系统</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>24</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>欢迎使用酒店入住与预订管理系统，请从上方菜单或工具栏选择功能</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>系统管理</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>客房管理</string>
+    </property>
+    <addaction name="actionRoomTypeManager"/>
+    <addaction name="actionRoomStatus"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>入住管理</string>
+    </property>
+    <addaction name="actionCheckIn"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>退房管理</string>
+    </property>
+    <addaction name="actionCheckOut"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>订单管理</string>
+    </property>
+    <addaction name="actionOrderManager"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_5"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="btnRoomType"/>
+   <addaction name="btnCheckIn"/>
+   <addaction name="btnCheckOut"/>
+   <addaction name="btnOrder"/>
+   <addaction name="btnRoomStatus"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionRoomTypeManager">
+   <property name="text">
+    <string>房型管理</string>
+   </property>
+  </action>
+  <action name="actionCheckIn">
+   <property name="text">
+    <string>入住登记</string>
+   </property>
+  </action>
+  <action name="actionCheckOut">
+   <property name="text">
+    <string>退房结算</string>
+   </property>
+  </action>
+  <action name="actionOrderManager">
+   <property name="text">
+    <string>订单管理</string>
+   </property>
+  </action>
+  <action name="actionRoomStatus">
+   <property name="text">
+    <string>房间状态</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="btnRoomType">
+   <property name="text">
+    <string>房型管理</string>
+   </property>
+   <property name="iconText">
+    <string>房型管理</string>
+   </property>
+  </action>
+  <action name="btnCheckIn">
+   <property name="text">
+    <string>入住登记</string>
+   </property>
+   <property name="iconText">
+    <string>入住登记</string>
+   </property>
+  </action>
+  <action name="btnCheckOut">
+   <property name="text">
+    <string>退房结算</string>
+   </property>
+   <property name="iconText">
+    <string>退房结算</string>
+   </property>
+  </action>
+  <action name="btnOrder">
+   <property name="text">
+    <string>订单管理</string>
+   </property>
+   <property name="iconText">
+    <string>订单管理</string>
+   </property>
+  </action>
+  <action name="btnRoomStatus">
+   <property name="text">
+    <string>房间状态</string>
+   </property>
+   <property name="iconText">
+    <string>房间状态</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
