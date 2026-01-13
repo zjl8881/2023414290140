@@ -7,7 +7,7 @@
 #include "dbhelper.h"
 
 namespace Ui {
-class CheckInManager;12312321
+class CheckInManager;
 }
 
 class CheckInManager : public QDialog
@@ -15,7 +15,7 @@ class CheckInManager : public QDialog
     Q_OBJECT
 
 public:
-    explicit CheckInManager(QWidget *parent = nullptr);
+    explicit CheckInManager(QWidget *parent = nullptr);q味请问
     ~CheckInManager();
 
 private slots:
