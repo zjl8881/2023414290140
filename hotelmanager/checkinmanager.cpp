@@ -20,7 +20,7 @@ CheckInManager::CheckInManager(QWidget *parent) :
     initUI();
     initModels();
     initValidators();
-    initConnections();
+    initConnections();a撒旦撒旦
 }
 
 CheckInManager::~CheckInManager()
