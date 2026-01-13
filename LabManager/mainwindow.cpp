@@ -6,10 +6,10 @@
 #include <QMessageBox>
 #include <QThread>
 #include <QInputDialog>
-#include "dialogadddevice.h"
+#include "dialogadddevice.h"我去恶趣味
 #include <QSqlQuery>
 
-MainWindow::MainWindow(QWidget *parent)全额万绮雯
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
