@@ -1,0 +1,14 @@
+debug/main.o
+debug/mainwindow.o
+debug/dbhelper.o
+debug/roomtypemanager.o
+debug/checkinmanager.o
+debug/checkoutmanager.o
+debug/ordermanager.o
+debug/roomstatusmanager.o
+debug/moc_mainwindow.o
+debug/moc_roomtypemanager.o
+debug/moc_checkinmanager.o
+debug/moc_checkoutmanager.o
+debug/moc_ordermanager.o
+debug/moc_roomstatusmanager.o

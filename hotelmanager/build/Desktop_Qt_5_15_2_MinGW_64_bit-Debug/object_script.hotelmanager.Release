@@ -1,0 +1,14 @@
+release/main.o
+release/mainwindow.o
+release/dbhelper.o
+release/roomtypemanager.o
+release/checkinmanager.o
+release/checkoutmanager.o
+release/ordermanager.o
+release/roomstatusmanager.o
+release/moc_mainwindow.o
+release/moc_roomtypemanager.o
+release/moc_checkinmanager.o
+release/moc_checkoutmanager.o
+release/moc_ordermanager.o
+release/moc_roomstatusmanager.o
