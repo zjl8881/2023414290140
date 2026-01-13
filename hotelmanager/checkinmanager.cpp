@@ -10,7 +10,7 @@
 CheckInManager::CheckInManager(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CheckInManager),
-    roomTypeModel(nullptr),d啊伟大伟大阿伟大
+    roomTypeModel(nullptr),d啊伟大伟大阿伟大a无敌
     roomModel(nullptr),
     customerModel(nullptr),
     idCardValidator(nullptr),
