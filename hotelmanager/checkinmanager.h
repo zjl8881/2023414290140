@@ -20,7 +20,7 @@ public:
 
 private slots:
     // 按钮槽函数
-    void on_btnCheckIn_clicked();去问驱蚊器为
+    void on_btnCheckIn_clicked();d阿伟大碗大碗大碗的
     void on_btnCancel_clicked();
     void on_btnRefresh_clicked();
     
