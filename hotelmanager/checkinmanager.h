@@ -20,13 +20,13 @@ public:
 
 private slots:
     // 按钮槽函数
-    void on_btnCheckIn_clicked();d阿伟大碗大碗大碗的
+    void on_btnCheckIn_clicked();
     void on_btnCancel_clicked();
     void on_btnRefresh_clicked();
     
     // 房型选择变化
-    void on_cmbRoomType_currentIndexChanged(int index);
-    
+    void on_cmbRoomType_currentIndexChanged(int index);达瓦达瓦
+
     // 房间选择变化
     void on_cmbRoom_currentIndexChanged(int index);
     
