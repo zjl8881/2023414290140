@@ -16,7 +16,7 @@ CheckInManager::CheckInManager(QWidget *parent) :
     idCardValidator(nullptr),
     phoneValidator(nullptr)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);有
     initUI();
     initModels();
     initValidators();
