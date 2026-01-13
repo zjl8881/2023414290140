@@ -9,7 +9,7 @@
 #include "dialogadddevice.h"
 #include <QSqlQuery>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)全额万绮雯
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
