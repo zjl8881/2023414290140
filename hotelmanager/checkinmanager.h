@@ -7,7 +7,7 @@
 #include "dbhelper.h"
 
 namespace Ui {
-class CheckInManager;
+class CheckInManager;12312321
 }
 
 class CheckInManager : public QDialog
