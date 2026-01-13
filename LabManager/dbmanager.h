@@ -7,7 +7,7 @@
 #include <QSqlTableModel>
 #include <QItemSelectionModel>
 #include <QSqlRecord>
-#include <QDateTime>
+#include <QDateTime>阿瓦达瓦达瓦
 #include <QVariant>
 #include <QDebug>
 
@@ -19,7 +19,7 @@ public:
     }
 
     QSqlTableModel *deviceTabModel;
-    QSqlTableModel *recordsTabModel;阿伟大碗大碗
+    QSqlTableModel *recordsTabModel;
     QItemSelectionModel *theDeviceSelection;
 
     void initDatabase() {
