@@ -11,7 +11,7 @@ DialogReserve::DialogReserve(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("申请预约设备");
-瓦区的阿瓦达伟大伟大
+
     // 重点：手动连接按钮盒信号到对话框槽
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
