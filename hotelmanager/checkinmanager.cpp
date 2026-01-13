@@ -1,9 +1,11 @@
 #include "checkinmanager.h"
 #include "ui_checkinmanager.h"
+#include "dbhelper.h"
 #include <QMessageBox>
+#include <QSqlQuery>
 #include <QSqlRecord>
-#include <QRegExp>
-#include <QDebug>
+#include <QDate>
+#include <QRegExpValidator>
 
 CheckInManager::CheckInManager(QWidget *parent) :
     QDialog(parent),
@@ -24,70 +26,141 @@ CheckInManager::CheckInManager(QWidget *parent) :
 CheckInManager::~CheckInManager()
 {
     delete ui;
-    
-    if (roomTypeModel) delete roomTypeModel;
-    if (roomModel) delete roomModel;
-    if (customerModel) delete customerModel;
-    if (idCardValidator) delete idCardValidator;
-    if (phoneValidator) delete phoneValidator;
+    if (roomTypeModel) {
+        delete roomTypeModel;
+    }
+    if (roomModel) {
+        delete roomModel;
+    }
+    if (customerModel) {
+        delete customerModel;
+    }
+    if (idCardValidator) {
+        delete idCardValidator;
+    }
+    if (phoneValidator) {
+        delete phoneValidator;
+    }
 }
 
 void CheckInManager::initUI()
 {
     // 设置窗口标题
-    setWindowTitle("客户入住登记");
+    setWindowTitle("入住登记");
     
     // 设置窗口大小
-    resize(800, 600);
+    resize(700, 500);
     
-    // 初始化日期控件
+    // 初始化日期选择器
     ui->deCheckIn->setDate(QDate::currentDate());
     ui->deCheckOut->setDate(QDate::currentDate().addDays(1));
-    ui->deCheckIn->setMinimumDate(QDate::currentDate());
-    ui->deCheckOut->setMinimumDate(ui->deCheckIn->date().addDays(1));
-    
-    // 初始化搜索框
-    ui->leCustomerSearch->setPlaceholderText("输入客户姓名或身份证号搜索...");
 }
 
 void CheckInManager::initModels()
 {
-    // 创建房型数据模型
+    // 初始化房型模型
     roomTypeModel = new QSqlQueryModel(this);
-    ui->cmbRoomType->setModel(roomTypeModel);
-    ui->cmbRoomType->setModelColumn(1); // 显示房型名称
     
-    // 创建房间数据模型
+    // 初始化房间模型
     roomModel = new QSqlQueryModel(this);
-    ui->cmbRoom->setModel(roomModel);
-    ui->cmbRoom->setModelColumn(1); // 显示房间号
     
-    // 创建客户数据模型
+    // 初始化客户模型
     customerModel = new QSqlQueryModel(this);
     
-    // 加载初始数据
+    // 加载房型数据
     loadRoomTypes();
 }
 
 void CheckInManager::initValidators()
 {
-    // 身份证号验证器（18位）
-    // 宽松的正则表达式，允许中间输入过程
-    QRegExp idCardRegex("^[1-9]\\d{0,5}(18|19|20)?\\d{0,2}(0[1-9]|1[0-2])?(0[1-9]|[12]\\d|3[01])?\\d{0,3}[\\dXx]?$");
+    // 设置ID卡验证器
+    QRegExp idCardRegex("^[1-9]\\d{5}(18|19|20)\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$");
     idCardValidator = new QRegExpValidator(idCardRegex, this);
     ui->leIdCard->setValidator(idCardValidator);
-    ui->leIdCard->setMaxLength(18);
     
-    // 手机号验证器（11位）
-    QRegExp phoneRegex("^1[3-9]\\d{0,9}$");
+    // 设置手机号验证器
+    QRegExp phoneRegex("^1[3-9]\\d{9}$");
     phoneValidator = new QRegExpValidator(phoneRegex, this);
     ui->lePhone->setValidator(phoneValidator);
-    ui->lePhone->setMaxLength(11);
 }
 
 void CheckInManager::initConnections()
 {
-    // 这里可以添加额外的信号与槽连接
+    // 连接信号与槽
+    connect(ui->cmbRoomType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CheckInManager::on_cmbRoomType_currentIndexChanged);
+    connect(ui->deCheckIn, &QDateEdit::dateChanged, this, &CheckInManager::on_deCheckIn_dateChanged);
+    connect(ui->deCheckOut, &QDateEdit::dateChanged, this, &CheckInManager::on_deCheckOut_dateChanged);
+}
+
+void CheckInManager::loadRoomTypes()
+{
+    // 从数据库获取房型列表，只显示有可用房间的房型
+    QSqlQuery query(DBHelper::getInstance()->getDatabase());
+    query.prepare("SELECT type_id, name FROM room_type WHERE available_rooms > 0");
+    
+    if (query.exec()) {
+        roomTypeModel->setQuery(std::move(query));
+        ui->cmbRoomType->setModel(roomTypeModel);
+        ui->cmbRoomType->setModelColumn(1);
+    }
+    
+    // 加载房间号
+    if (ui->cmbRoomType->currentIndex() >= 0) {
+        int typeId = ui->cmbRoomType->model()->index(ui->cmbRoomType->currentIndex(), 0).data().toInt();
+        loadRoomsByType(typeId);
+    }
+}
+
+void CheckInManager::loadRoomsByType(int typeId)
+{
+    // 从数据库获取该房型下的空闲房间
+    QSqlQuery query(DBHelper::getInstance()->getDatabase());
+    query.prepare("SELECT room_id, room_number FROM room WHERE type_id = :type_id AND status = '空闲'");
+    query.bindValue(":type_id", typeId);
+    
+    if (query.exec()) {
+        roomModel->setQuery(std::move(query));
+        ui->cmbRoom->setModel(roomModel);
+        ui->cmbRoom->setModelColumn(1);
+    }
+    
+    // 计算预计金额
+    calculateExpectedAmount();
+}
+
+void CheckInManager::calculateExpectedAmount()
+{
+    // 获取选中的房型ID
+    if (ui->cmbRoomType->currentIndex() < 0) {
+        ui->leExpectedAmount->setText("0.00");
+        return;
+    }
+    
+    int typeId = ui->cmbRoomType->itemData(ui->cmbRoomType->currentIndex()).toInt();
+    if (typeId <= 0) {
+        ui->leExpectedAmount->setText("0.00");
+        return;
+    }
+    
+    // 获取单日房价
+    QSqlQuery query(DBHelper::getInstance()->getDatabase());
+    query.prepare("SELECT price_per_day FROM room_type WHERE type_id = :type_id");
+    query.bindValue(":type_id", typeId);
+    
+    double pricePerDay = 0.0;
+    if (query.exec() && query.next()) {
+        pricePerDay = query.value(0).toDouble();
+    }
+    
+    // 计算入住天数
+    int days = ui->deCheckIn->date().daysTo(ui->deCheckOut->date());
+    if (days < 1) {
+        days = 1;
+    }
+    
+    // 计算总价
+    double totalAmount = pricePerDay * days;
+    ui->leExpectedAmount->setText(QString::number(totalAmount, 'f', 2));
 }
 
 void CheckInManager::clearForm()
@@ -97,151 +170,59 @@ void CheckInManager::clearForm()
     ui->lePhone->clear();
     ui->deCheckIn->setDate(QDate::currentDate());
     ui->deCheckOut->setDate(QDate::currentDate().addDays(1));
-    ui->cmbRoomType->setCurrentIndex(0);
+    ui->cmbRoomType->setCurrentIndex(-1);
     ui->cmbRoom->clear();
     ui->leExpectedAmount->setText("0.00");
 }
 
-void CheckInManager::loadRoomTypes()
-{
-    // 移除available_rooms > 0条件，显示所有房型
-    QString sql = "SELECT type_id, name, price_per_day FROM room_type";
-    roomTypeModel->setQuery(sql, DBHelper::getInstance()->getDatabase());
-    
-    if (roomTypeModel->lastError().isValid()) {
-        QMessageBox::critical(this, "错误", "加载房型数据失败: " + roomTypeModel->lastError().text());
-        return;
-    }
-    
-    // 设置列名（仅内部使用）
-    roomTypeModel->setHeaderData(0, Qt::Horizontal, "type_id");
-    roomTypeModel->setHeaderData(1, Qt::Horizontal, "name");
-    roomTypeModel->setHeaderData(2, Qt::Horizontal, "price_per_day");
-    
-    // 重新设置模型，确保组合框更新
-    ui->cmbRoomType->setModel(nullptr);
-    ui->cmbRoomType->setModel(roomTypeModel);
-    ui->cmbRoomType->setModelColumn(1); // 显示房型名称
-    
-    if (roomTypeModel->rowCount() > 0) {
-        // 默认选择第一个房型
-        ui->cmbRoomType->setCurrentIndex(0);
-        on_cmbRoomType_currentIndexChanged(0);
-    } else {
-        ui->cmbRoom->clear();
-        ui->leExpectedAmount->setText("0.00");
-    }
-}
-
-void CheckInManager::loadRoomsByType(int typeId)
-{
-    QString sql = QString("SELECT room_id, room_number FROM room WHERE type_id = %1 AND status = '空闲'").arg(typeId);
-    roomModel->setQuery(sql, DBHelper::getInstance()->getDatabase());
-    
-    if (roomModel->lastError().isValid()) {
-        QMessageBox::critical(this, "错误", "加载房间数据失败: " + roomModel->lastError().text());
-        return;
-    }
-    
-    // 设置列名（仅内部使用）
-    roomModel->setHeaderData(0, Qt::Horizontal, "room_id");
-    roomModel->setHeaderData(1, Qt::Horizontal, "room_number");
-    
-    // 重新设置模型，确保组合框更新
-    ui->cmbRoom->setModel(nullptr);
-    ui->cmbRoom->setModel(roomModel);
-    ui->cmbRoom->setModelColumn(1); // 显示房间号
-    
-    if (roomModel->rowCount() > 0) {
-        // 默认选择第一个房间
-        ui->cmbRoom->setCurrentIndex(0);
-        calculateExpectedAmount();
-    } else {
-        ui->cmbRoom->setModel(nullptr);
-        ui->leExpectedAmount->setText("0.00");
-    }
-}
-
-void CheckInManager::calculateExpectedAmount()
-{
-    // 获取选择的房型
-    int roomTypeIndex = ui->cmbRoomType->currentIndex();
-    if (roomTypeIndex < 0) {
-        ui->leExpectedAmount->setText("0.00");
-        return;
-    }
-    
-    // 获取房型单价
-    double pricePerDay = roomTypeModel->record(roomTypeIndex).value(2).toDouble();
-    
-    // 计算入住天数
-    int days = ui->deCheckIn->date().daysTo(ui->deCheckOut->date());
-    if (days <= 0) days = 1;
-    
-    // 计算预计金额
-    double expectedAmount = pricePerDay * days;
-    ui->leExpectedAmount->setText(QString("%1").arg(expectedAmount, 0, 'f', 2));
-}
-
 bool CheckInManager::validateForm()
 {
-    // 验证客户姓名
-    if (ui->leCustomerName->text().trimmed().isEmpty()) {
-        QMessageBox::warning(this, "警告", "请输入客户姓名");
-        ui->leCustomerName->setFocus();
-        return false;
-    }
-    
-    // 验证身份证号
+    // 检查表单数据
+    QString name = ui->leCustomerName->text().trimmed();
     QString idCard = ui->leIdCard->text().trimmed();
-    if (idCard.isEmpty()) {
-        QMessageBox::warning(this, "警告", "请输入身份证号");
-        ui->leIdCard->setFocus();
-        return false;
-    }
-    
-    // 使用严格的正则表达式进行最终验证
-    QRegExp strictIdCardRegex("^[1-9]\\d{5}(18|19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])\\d{3}[\\dXx]$");
-    if (!strictIdCardRegex.exactMatch(idCard)) {
-        QMessageBox::warning(this, "警告", "身份证号格式不正确");
-        ui->leIdCard->setFocus();
-        return false;
-    }
-    
-    // 验证手机号
     QString phone = ui->lePhone->text().trimmed();
+    
+    if (name.isEmpty()) {
+        QMessageBox::warning(this, "警告", "请输入客户姓名");
+        return false;
+    }
+    
+    if (idCard.isEmpty()) {
+        QMessageBox::warning(this, "警告", "请输入身份证号码");
+        return false;
+    }
+    
+    // 验证ID卡格式
+    QRegExp idCardRegex("^[1-9]\\d{5}(18|19|20)\\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$");
+    if (!idCardRegex.exactMatch(idCard)) {
+        QMessageBox::warning(this, "警告", "请输入有效的身份证号码");
+        return false;
+    }
+    
     if (phone.isEmpty()) {
-        QMessageBox::warning(this, "警告", "请输入手机号");
-        ui->lePhone->setFocus();
+        QMessageBox::warning(this, "警告", "请输入手机号码");
         return false;
     }
     
-    // 使用严格的正则表达式进行最终验证
-    QRegExp strictPhoneRegex("^1[3-9]\\d{9}$");
-    if (!strictPhoneRegex.exactMatch(phone)) {
-        QMessageBox::warning(this, "警告", "手机号格式不正确");
-        ui->lePhone->setFocus();
+    // 验证手机号格式
+    QRegExp phoneRegex("^1[3-9]\\d{9}$");
+    if (!phoneRegex.exactMatch(phone)) {
+        QMessageBox::warning(this, "警告", "请输入有效的手机号码");
         return false;
     }
     
-    // 验证房型选择
     if (ui->cmbRoomType->currentIndex() < 0) {
         QMessageBox::warning(this, "警告", "请选择房型");
-        ui->cmbRoomType->setFocus();
         return false;
     }
     
-    // 验证房间选择
-    if (ui->cmbRoom->currentIndex() < 0 || ui->cmbRoom->currentText().isEmpty()) {
-        QMessageBox::warning(this, "警告", "该房型下没有可用房间，请选择其他房型");
-        ui->cmbRoomType->setFocus();
+    if (ui->cmbRoom->currentIndex() < 0) {
+        QMessageBox::warning(this, "警告", "请选择房间");
         return false;
     }
     
-    // 验证日期
-    if (ui->deCheckIn->date() >= ui->deCheckOut->date()) {
-        QMessageBox::warning(this, "警告", "退房日期必须晚于入住日期");
-        ui->deCheckOut->setFocus();
+    if (ui->deCheckIn->date() > ui->deCheckOut->date()) {
+        QMessageBox::warning(this, "警告", "入住日期不能晚于退房日期");
         return false;
     }
     
@@ -257,76 +238,95 @@ bool CheckInManager::processCheckIn()
     }
     
     try {
-        // 1. 检查客户是否已存在
-        QString idCard = ui->leIdCard->text().trimmed();
-        int customerId = -1;
-        
         QSqlQuery query(DBHelper::getInstance()->getDatabase());
+        
+        // 获取表单数据
+        QString name = ui->leCustomerName->text().trimmed();
+        QString idCard = ui->leIdCard->text().trimmed();
+        QString phone = ui->lePhone->text().trimmed();
+        int roomId = ui->cmbRoom->itemData(ui->cmbRoom->currentIndex()).toInt();
+        QDate checkInDate = ui->deCheckIn->date();
+        QDate checkOutDate = ui->deCheckOut->date();
+        
+        // 检查客户是否已存在
         query.prepare("SELECT customer_id FROM customer WHERE id_card = :id_card");
         query.bindValue(":id_card", idCard);
         
+        int customerId = -1;
         if (query.exec() && query.next()) {
-            // 客户已存在，获取客户ID
             customerId = query.value(0).toInt();
         } else {
-            // 客户不存在，插入新客户
+            // 插入新客户
             query.prepare("INSERT INTO customer (name, id_card, phone) VALUES (:name, :id_card, :phone)");
-            query.bindValue(":name", ui->leCustomerName->text().trimmed());
+            query.bindValue(":name", name);
             query.bindValue(":id_card", idCard);
-            query.bindValue(":phone", ui->lePhone->text().trimmed());
+            query.bindValue(":phone", phone);
             
             if (!query.exec()) {
-                throw QString("插入客户信息失败: " + query.lastError().text());
+                throw QString("无法插入客户记录: " + query.lastError().text());
             }
             
             customerId = query.lastInsertId().toInt();
         }
         
-        // 2. 获取选择的房间ID
-        int roomIndex = ui->cmbRoom->currentIndex();
-        int roomId = roomModel->record(roomIndex).value(0).toInt();
-        
-        // 3. 计算实际金额
-        double amount = ui->leExpectedAmount->text().toDouble();
-        
-        // 4. 插入订单
-        query.prepare("INSERT INTO order_info (customer_id, room_id, check_in_date, check_out_date, status, total_amount) "
-                      "VALUES (:customer_id, :room_id, :check_in_date, :check_out_date, '已入住', :total_amount)");
-        query.bindValue(":customer_id", customerId);
+        // 获取房间信息和房价
+        query.prepare("SELECT type_id FROM room WHERE room_id = :room_id");
         query.bindValue(":room_id", roomId);
-        query.bindValue(":check_in_date", ui->deCheckIn->date().toString("yyyy-MM-dd"));
-        query.bindValue(":check_out_date", ui->deCheckOut->date().toString("yyyy-MM-dd"));
-        query.bindValue(":total_amount", amount);
         
-        if (!query.exec()) {
-            throw QString("插入订单失败: " + query.lastError().text());
+        int typeId = -1;
+        if (!query.exec() || !query.next()) {
+            throw QString("无法获取房间信息");
+        }
+        typeId = query.value(0).toInt();
+        
+        // 获取房价
+        double pricePerDay = 0.0;
+        query.prepare("SELECT price_per_day FROM room_type WHERE type_id = :type_id");
+        query.bindValue(":type_id", typeId);
+        if (query.exec() && query.next()) {
+            pricePerDay = query.value(0).toDouble();
         }
         
-        // 5. 更新房间状态为"已入住"
+        // 计算入住天数和总价
+        int days = checkInDate.daysTo(checkOutDate);
+        if (days < 1) {
+            days = 1;
+        }
+        double totalAmount = pricePerDay * days;
+        
+        // 插入订单
+        query.prepare("INSERT INTO order_info (customer_id, room_id, check_in_date, check_out_date, status, total_amount) VALUES (:customer_id, :room_id, :check_in_date, :check_out_date, '已入住', :total_amount)");
+        query.bindValue(":customer_id", customerId);
+        query.bindValue(":room_id", roomId);
+        query.bindValue(":check_in_date", checkInDate.toString("yyyy-MM-dd"));
+        query.bindValue(":check_out_date", checkOutDate.toString("yyyy-MM-dd"));
+        query.bindValue(":total_amount", totalAmount);
+        
+        if (!query.exec()) {
+            throw QString("无法插入订单记录: " + query.lastError().text());
+        }
+        
+        // 更新房间状态
         query.prepare("UPDATE room SET status = '已入住' WHERE room_id = :room_id");
         query.bindValue(":room_id", roomId);
         
         if (!query.exec()) {
-            throw QString("更新房间状态失败: " + query.lastError().text());
+            throw QString("无法更新房间状态: " + query.lastError().text());
         }
         
-        // 6. 更新房型可用数量
-        int roomTypeIndex = ui->cmbRoomType->currentIndex();
-        int typeId = roomTypeModel->record(roomTypeIndex).value(0).toInt();
-        
+        // 更新房型的可用房间数
         query.prepare("UPDATE room_type SET available_rooms = available_rooms - 1 WHERE type_id = :type_id");
         query.bindValue(":type_id", typeId);
         
         if (!query.exec()) {
-            throw QString("更新房型可用数量失败: " + query.lastError().text());
+            throw QString("无法更新可用房间数: " + query.lastError().text());
         }
         
         // 提交事务
         if (!DBHelper::getInstance()->commitTransaction()) {
-            throw QString("提交事务失败");
+            throw QString("无法提交事务");
         }
         
-        QMessageBox::information(this, "成功", "客户入住登记成功");
         return true;
         
     } catch (const QString &error) {
@@ -337,21 +337,14 @@ bool CheckInManager::processCheckIn()
     }
 }
 
-// 按钮槽函数实现
 void CheckInManager::on_btnCheckIn_clicked()
 {
-    // 验证表单
-    if (!validateForm()) {
-        return;
-    }
-    
-    // 处理入住登记
-    if (processCheckIn()) {
-        // 清空表单
-        clearForm();
-        
-        // 刷新数据
-        loadRoomTypes();
+    if (validateForm()) {
+        if (processCheckIn()) {
+            QMessageBox::information(this, "成功", "入住登记成功");
+            clearForm();
+            loadRoomTypes(); // 重新加载房型和房间号
+        }
     }
 }
 
@@ -363,61 +356,40 @@ void CheckInManager::on_btnCancel_clicked()
 void CheckInManager::on_btnRefresh_clicked()
 {
     loadRoomTypes();
-    calculateExpectedAmount();
-    QMessageBox::information(this, "成功", "数据刷新成功");
 }
 
-// 房型选择变化
 void CheckInManager::on_cmbRoomType_currentIndexChanged(int index)
 {
     if (index >= 0) {
-        int typeId = roomTypeModel->record(index).value(0).toInt();
+        int typeId = ui->cmbRoomType->itemData(index).toInt();
         loadRoomsByType(typeId);
-        calculateExpectedAmount();
     }
 }
 
-// 房间选择变化
 void CheckInManager::on_cmbRoom_currentIndexChanged(int index)
 {
+    // 计算预计金额
     calculateExpectedAmount();
 }
 
-// 日期变化
 void CheckInManager::on_deCheckIn_dateChanged(const QDate &date)
 {
-    ui->deCheckOut->setMinimumDate(date.addDays(1));
+    // 确保退房日期不早于入住日期
+    if (ui->deCheckOut->date() < date) {
+        ui->deCheckOut->setDate(date.addDays(1));
+    }
+    // 计算预计金额
     calculateExpectedAmount();
 }
 
 void CheckInManager::on_deCheckOut_dateChanged(const QDate &date)
 {
+    // 计算预计金额
     calculateExpectedAmount();
 }
 
-// 搜索客户
 void CheckInManager::on_btnSearchCustomer_clicked()
 {
-    QString searchText = ui->leCustomerSearch->text().trimmed();
-    if (searchText.isEmpty()) {
-        QMessageBox::warning(this, "警告", "请输入搜索条件");
-        return;
-    }
-    
-    QString sql = QString("SELECT customer_id, name, id_card, phone FROM customer WHERE name LIKE '%%1%' OR id_card LIKE '%%1%'").arg(searchText);
-    
-    if (customerModel) {
-        delete customerModel;
-    }
-    
-    customerModel = new QSqlQueryModel(this);
-    customerModel->setQuery(sql, DBHelper::getInstance()->getDatabase());
-    
-    if (customerModel->lastError().isValid()) {
-        QMessageBox::critical(this, "错误", "搜索客户失败: " + customerModel->lastError().text());
-        return;
-    }
-    
-    // 显示搜索结果（这里可以根据需要添加表格显示）
-    QMessageBox::information(this, "搜索结果", QString("找到 %1 位客户").arg(customerModel->rowCount()));
+    // 这里可以实现客户搜索功能
+    QMessageBox::information(this, "提示", "客户搜索功能待实现");
 }

@@ -28,7 +28,7 @@ private slots:
     void on_cmbRoomType_currentIndexChanged(int index);
 
     // 房间选择变化
-    void on_cmbRoom_currentIndexChanged(int index);伟大达娃
+    void on_cmbRoom_currentIndexChanged(int index);
     
     // 日期变化
     void on_deCheckIn_dateChanged(const QDate &date);
